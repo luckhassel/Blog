@@ -38,7 +38,7 @@ steps:
   name: 'CopyFiles'
   displayName: 'Copy dockerfile'
   inputs:
-    SourceFolder: '$(Build.SourcesDirectory)'
+    SourceFolder: '$(Build.SourcesDirectory)/Blog'
     Contents: 'Dockerfile'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
     
