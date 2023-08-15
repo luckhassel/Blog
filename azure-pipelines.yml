@@ -7,7 +7,7 @@ trigger:
 - main
 
 pool:
-  vmImage: windows-latest
+  vmImage: ubuntu-latest
 
 variables:
   buildConfiguration: 'Release'
@@ -29,7 +29,7 @@ steps:
   displayName: 'Publish .NET project'
   inputs:
     command: 'publish'
-    publishWebProjects: true
+    publishWebProjects: false
     projects: '$(project)'
     arguments: '''--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'''
     zipAfterPublish: false
