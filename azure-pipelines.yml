@@ -11,6 +11,7 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
+  project: '**/Blog.csproj'
 
 steps:
 
@@ -29,6 +30,7 @@ steps:
   inputs:
     command: 'publish'
     publishWebProjects: true
+    projects: '$(project)'
     arguments: '''--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'''
     zipAfterPublish: false
 
