@@ -35,11 +35,19 @@ steps:
     zipAfterPublish: false
 
 - task: CopyFiles@2
-  name: 'CopyFiles'
+  name: 'CopyDockerFiles'
   displayName: 'Copy dockerfile'
   inputs:
     SourceFolder: '$(Build.SourcesDirectory)'
     Contents: 'Dockerfile'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/Blog'
+    
+- task: CopyFiles@2
+  name: 'CopySlnFiles'
+  displayName: 'Copy sln'
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)'
+    Contents: 'Blog.sln'
     TargetFolder: '$(Build.ArtifactStagingDirectory)/Blog'
     
 - task: PublishBuildArtifacts@1
