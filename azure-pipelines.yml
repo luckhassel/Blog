@@ -42,13 +42,6 @@ steps:
     Contents: 'Dockerfile'
     TargetFolder: '$(Build.ArtifactStagingDirectory)/Blog'
     
-- task: CopyFiles@2
-  name: 'CopySlnFiles'
-  displayName: 'Copy sln'
-  inputs:
-    SourceFolder: '$(Build.SourcesDirectory)'
-    Contents: 'Blog.sln'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)/Blog'
     
 - task: PublishBuildArtifacts@1
   name: 'PublishArtifacts'
