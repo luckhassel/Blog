@@ -4,5 +4,5 @@ FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build-env
 ENV ASPNETCORE_URLS=http://*:80
 EXPOSE 80
 WORKDIR /src
-COPY ./app . 
+COPY . . 
 ENTRYPOINT ["dotnet", "Blog.dll"]
