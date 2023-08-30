@@ -14,7 +14,10 @@ spec:
     spec:
       containers:
       - name: blog-api
-        image: kubernetes:1.0.2
+        image: registryluckblog.azurecr.io/blog:$(Build.BuildId)
+        imagePullPolicy: IfNotPresent
+        imagePullSecrets:
+          - name: blogsecret
         env:
           - name: DOTNET_ENVIRONMENT
             value: "Development"
