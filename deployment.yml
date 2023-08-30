@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: blog-api
-        image: registryluckblog.azurecr.io/blog:$(Build.BuildId)
+        image: registryluckblog.azurecr.io/blog:v1
         imagePullPolicy: IfNotPresent
         imagePullSecrets:
           - name: blogsecret
