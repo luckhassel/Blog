@@ -42,6 +42,14 @@ steps:
     Contents: 'Dockerfile'
     TargetFolder: '$(Build.ArtifactStagingDirectory)/Blog'
     
+- task: CopyFiles@2
+  name: 'CopyKubernetesFiles'
+  displayName: 'Copy kubernetes'
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)'
+    Contents: 'deployment.yml'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/Blog'
+    
     
 - task: PublishBuildArtifacts@1
   name: 'PublishArtifacts'
