@@ -16,8 +16,6 @@ spec:
       - name: blog-api
         image: registryluckblog.azurecr.io/blog:v1
         imagePullPolicy: IfNotPresent
-        imagePullSecrets:
-          - name: blogsecret
         env:
           - name: DOTNET_ENVIRONMENT
             value: "Development"
@@ -29,6 +27,8 @@ spec:
           limits:
             memory: "128Mi"
             cpu: "500m"
+      imagePullSecrets:
+        - name: blogsecret
 ---
 apiVersion: v1
 kind: Service
