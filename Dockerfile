@@ -3,5 +3,5 @@
 FROM mcr.microsoft.com/dotnet/runtime:7.0-alpine-amd64
 EXPOSE 80
 WORKDIR /src
-COPY ./src . 
+COPY . . 
 ENTRYPOINT ["dotnet", "Blog.dll"]
