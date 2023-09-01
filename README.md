@@ -5,7 +5,7 @@ Projeto consiste em uma API desenvolvida utilizando .NET 7 que possui automaçã
 A persistência de dados ocorre em um banco de dados SQL hospedado na Azure, bem como os seus segredos e conexões também estão, utilizando o serviço de Key Vault.
 
 ## Requisitos
-- Docker container OU .NET 7 SDK
+- Docker OU .NET 7 SDK
 - Cadastro na plataforma Azure
 - Cadastro na plataforma Azure DevOps
 - Git
@@ -19,13 +19,13 @@ A persistência de dados ocorre em um banco de dados SQL hospedado na Azure, bem
 
 ## CI/CD
 ### Processo de CI
-- Toda vez que é feito um commit na branch main, a pipeline configurada através do arquivos azure-pipelines.yml é executada na plataforma Azure DevOps.
+Toda vez que é feito um commit na branch main, a pipeline configurada através do arquivos azure-pipelines.yml é executada na plataforma Azure DevOps.
 Quando inicada, essa pipeline realiza configura o NuGet como a fonte dos pacotes utilizados no projeto. Feito isso, o projeto é restaurado e publicado.
 Logo depois, os arquivos de configuração Docker e deployment.yml (responsável pela configuração do deployment do kubernetes) são copiados para a pasta do artefato.
 Então, na sequência, é feito o build do projeto e seu artefato é publicado.
 
 ### Processo de CD
-- Após a publicação do artefato, é possível fazer o deploy da aplicação no cluster kubernetes através da sua pipeline de CD. Nela, primeiramente é feita a conexão com o Azure Key Vault.
+Após a publicação do artefato, é possível fazer o deploy da aplicação no cluster kubernetes através da sua pipeline de CD. Nela, primeiramente é feita a conexão com o Azure Key Vault.
 Feito isso, o appsettings.json tem suas variáveis alteradas de acordo com o ambiente de deploy (development no caso) utilizando as variáveis retiradas da key vault.
 Agora, o container está pronto para ser publicado no Azure Container Registry. Para isso, é criada uma tarefa de Build e Push do container para o recurso da nuvem. Ao final, a imagem do container deve estar publicada
 com a versão da imagem relacionada ao Id do build. A última etapa então consiste em fazer a publicação dessa imagem no cluster. Isso é feito através de uma tarefa que utilizada o arquivo deployment.yml. No caso desse projeto,
