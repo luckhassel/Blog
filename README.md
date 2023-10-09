@@ -1,4 +1,4 @@
-# FIAP - TechChallenge02
+# FIAP - TechChallenge 02
 
 ## Visão Geral
 Projeto consiste em uma API desenvolvida utilizando .NET 7 que possui automação de seu processo de CI/CD para deploy em um cluster kubernetes na Azure (AKS).
