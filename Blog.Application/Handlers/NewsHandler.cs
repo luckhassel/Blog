@@ -34,11 +34,11 @@ namespace Blog.Application.Handlers
 
             var news = NewsEntity.Create(request.Title, request.Description, author.Id);
 
-            if (news.IsSuccess)
-            {
-                await _newsRepository.Create(news.Value);
-                await _newsRepository.Commit();
-            }
+            if (news.IsFailure)
+                return Result.Failure<CreateNewsResponseViewModel>(news.Error);
+
+            await _newsRepository.Create(news.Value);
+            await _newsRepository.Commit();
 
             return new CreateNewsResponseViewModel { Id = news.Value.Guid };
         }

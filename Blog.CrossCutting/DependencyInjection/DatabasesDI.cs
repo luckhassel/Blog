@@ -12,7 +12,7 @@ namespace Blog.CrossCutting.DependencyInjection
             services.AddDbContext<BlogContext>(options =>
             {
                 //options.UseInMemoryDatabase("DB");
-                options.UseSqlServer(configuration.GetConnectionString("Default"),
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
                     b => b.MigrationsAssembly("Blog"));
             });
         }

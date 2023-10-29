@@ -1,4 +1,6 @@
-﻿namespace Blog.Application.ViewModels
+﻿using System.Text.Json.Serialization;
+
+namespace Blog.Application.ViewModels
 {
     public class CreateUserRequestViewModel
     {
@@ -20,10 +22,14 @@
 
     public class GetUserResponseViewModel
     {
-        public string FirstName { get; set; } = string.Empty;
-        public string LastName { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-        public Guid Id { get; set; } 
+        [JsonPropertyName("firstName")]
+        public string FirstName { get; set; } 
+        [JsonPropertyName("lastName")]
+        public string LastName { get; set; }
+        [JsonPropertyName("email")]
+        public string Email { get; set; }
+        [JsonPropertyName("id")]
+        public Guid Id { get; set; }
     }
 
     public class LoginUserRequestViewModel

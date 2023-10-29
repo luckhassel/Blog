@@ -5,6 +5,10 @@
         public bool IsSuccess { get; }
         public bool IsFailure { get => !IsSuccess; }
         public Error? Error { get; private set; }
+        protected Result()
+        {
+
+        }
 
         protected Result(bool isSuccess, Error error)
         {

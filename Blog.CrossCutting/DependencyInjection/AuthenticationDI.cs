@@ -12,6 +12,7 @@ namespace Blog.CrossCutting.DependencyInjection
         public static void AddAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
             var applicationSettings = new ApplicationSettings();
+
             configuration.GetSection(nameof(ApplicationSettings)).Bind(applicationSettings);
 
             var encodedKey = Encoding.ASCII.GetBytes(applicationSettings.SecuritySettings.Secret);

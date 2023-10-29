@@ -1,4 +1,5 @@
 using Blog.CrossCutting.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -68,3 +69,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+
+public partial class Program { }

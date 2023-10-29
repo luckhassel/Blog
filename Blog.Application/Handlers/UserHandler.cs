@@ -27,11 +27,12 @@ namespace Blog.Application.Handlers
             var passwordHashed = _authenticationService.HashPassword(request.Password);
             var user = UserEntity.Create(request.FirstName, request.LastName, request.Email, passwordHashed);
 
-            if (user.IsSuccess)
-            {
-                await _userRepository.Create(user.Value);
-                await _userRepository.Commit();
-            }
+            if (user.IsFailure)
+                return Result.Failure<CreateUserResponseViewModel>(user.Error);
+            
+
+            await _userRepository.Create(user.Value);
+            await _userRepository.Commit();
 
             return new CreateUserResponseViewModel { Id = user.Value.Guid };
         }

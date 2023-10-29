@@ -2,11 +2,11 @@
 {
     public class ApplicationSettings
     {
-        public SecuritySettings SecuritySettings { get; set; } = new();
+        public SecuritySettings SecuritySettings { get; set; }
     }
 
     public class SecuritySettings
     {
-        public string Secret { get; set; } = string.Empty;
+        public string Secret { get; set; }
     }
 }
