@@ -44,6 +44,7 @@ builder.Services.AddServices(builder.Configuration);
 builder.Services.AddHandlers(builder.Configuration);
 builder.Services.AddSettings(builder.Configuration);
 builder.Services.AddAuthentication(builder.Configuration);
+builder.Services.AddTelemetry(builder.Configuration);
 
 var app = builder.Build();
 
