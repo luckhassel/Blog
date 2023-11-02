@@ -1,4 +1,6 @@
-﻿using Blog.Test.Util.Commons;
+﻿using Blog.Domain.Interfaces.Repositories;
+using Blog.Test.Util.Commons;
+using Blog.Test.Util.Factories;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net.Http.Headers;
@@ -14,7 +16,7 @@ namespace Blog.Test.Util
     public abstract class TestBaseFixture : IDisposable
     {
         private IServiceScope _scope;
-        private readonly WebApplicationFactory<Program> _webApplicationFactory;
+        private readonly WebApplicationFactoryTest<Program> _webApplicationFactory;
         protected HttpClient _client { get; private set; }
 
         protected IServiceProvider ServiceProvider { get; private set; }
@@ -26,7 +28,7 @@ namespace Blog.Test.Util
             NumberHandling = JsonNumberHandling.AllowReadingFromString
         };
 
-        protected TestBaseFixture(WebApplicationFactory<Program> webApplicationFactory)
+        protected TestBaseFixture(WebApplicationFactoryTest<Program> webApplicationFactory)
         {
             _webApplicationFactory = webApplicationFactory;
             _client = _webApplicationFactory.CreateClient();

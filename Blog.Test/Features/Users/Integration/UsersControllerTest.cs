@@ -12,7 +12,9 @@ using Blog.Test.Util.Factories;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Moq;
 using NSubstitute;
+using NSubstitute.ReturnsExtensions;
 using System.Net.Http.Json;
 using Xunit;
 
@@ -22,11 +24,14 @@ namespace Blog.Test.Features.Users.Integration
     {
         private readonly IUserHandler _userHandler;
         private readonly ILogger<UsersController> _logger;
+        private readonly IUserRepository _userRepository;
 
         public UsersControllerTest() : base(new WebApplicationFactoryTest<Program>())
         {
             _userHandler = Substitute.For<IUserHandler>();
             _logger = Substitute.For<ILogger<UsersController>>();
+            _userRepository = Substitute.For<IUserRepository>();
+            //DeleteRegistersInDatabase();
         }
 
         [Fact]
@@ -107,7 +112,7 @@ namespace Blog.Test.Features.Users.Integration
             var request = new CreateUserRequestViewModelBuilder()
                 .WithFirstName("Teste")
                 .WithLastName("Do teste")
-                .WithEmail("Teste@teste.com")
+                .WithEmail("fake@faketeste.com")
                 .WithPassword("teste123")
                 .Build();
 
@@ -141,6 +146,21 @@ namespace Blog.Test.Features.Users.Integration
             var responseUser = new GetUserResponseViewModel { Email = user.Email, FirstName = user.FirstName, LastName = user.LastName, Id = user.Guid };
 
             return responseUser;
+        }
+
+        private async Task DeleteRegistersInDatabase()
+        {
+            var repositoryUser = ServiceProvider.GetService<IUserRepository>();
+
+            var users = repositoryUser.List().ToList();
+
+            foreach (var user in users)
+            {
+                repositoryUser.Delete(user);
+            }
+
+            if(users.Any())
+                await repositoryUser.Commit();
         }
     }
 }

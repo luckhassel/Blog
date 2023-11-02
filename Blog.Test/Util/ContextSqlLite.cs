@@ -11,7 +11,7 @@ namespace Blog.Test.Util
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite(WebApplicationFactoryTest<Program>.ConnectionString);
+            optionsBuilder.UseInMemoryDatabase(WebApplicationFactoryTest<Program>.connectionString);
         }
 
         public ContextSqlLite(DbContextOptions<BlogContext> options) : base(options)

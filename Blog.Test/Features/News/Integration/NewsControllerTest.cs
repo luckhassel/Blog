@@ -1,5 +1,4 @@
-﻿using Azure.Core;
-using Blog.Application.Interfaces;
+﻿using Blog.Application.Interfaces;
 using Blog.Application.ViewModels;
 using Blog.Controllers;
 using Blog.Domain.Entities;
@@ -34,8 +33,8 @@ namespace Blog.Test.Features.News.Integration
         public async Task CreateNews_ShouldCreateANews_WhenRequestIsValid()
         {
             var requestUserPreviously = new CreateUserRequestViewModelBuilder()
-                .WithFirstName("Teste")
-                .WithLastName("Doteste")
+                .WithFirstName("fake")
+                .WithLastName("FakeTest")
                 .WithEmail("teste@teste.com")
                 .WithPassword("teste123")
                 .Build();
@@ -110,9 +109,11 @@ namespace Blog.Test.Features.News.Integration
         [Fact]
         public async Task ListNews_ShouldReturn_NewsList()
         {
+            await DeleteRegistersPreviouslyInDatabase();
+
             var requestUserPreviously1 = new CreateUserRequestViewModelBuilder()
-                .WithFirstName("Teste")
-                .WithLastName("Doteste")
+                .WithFirstName("FakeTest")
+                .WithLastName("FakeTest")
                 .WithEmail("teste@teste.com")
                 .WithPassword("teste123")
                 .Build();
@@ -194,6 +195,31 @@ namespace Blog.Test.Features.News.Integration
                 Id = news.Guid,
                 Author = new GetUserResponseViewModel { Email = user.Email, FirstName = user.FirstName, LastName = user.LastName, Id = user.Guid}
             };
+        }
+
+        private async Task DeleteRegistersPreviouslyInDatabase()
+        {
+            var repository = ServiceProvider.GetService<INewsRepository>();
+            var repositoryUser = ServiceProvider.GetService<IUserRepository>();
+
+            var users = repositoryUser.List().ToList();
+            var newsList = repository.List().ToList();
+
+            foreach (var user in users)
+            {
+                repositoryUser.Delete(user);
+            }
+
+            foreach (var news in newsList)
+            {
+                repository.Delete(news);
+            }
+
+            if (users.Any())
+                await repositoryUser.Commit();
+
+            if (newsList.Any())
+                await repository.Commit();
         }
     }
 }
