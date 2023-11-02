@@ -13,6 +13,7 @@ variables:
   buildConfiguration: 'Release'
   project: '**/Blog.csproj'
   solution: '**/Blog.sln'
+  testProject: '**/Blog.Test.csproj'
 
 steps:
 
@@ -41,6 +42,14 @@ steps:
     projects: '$(project)'
     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory) -r linux-x64 --self-contained false --no-restore'
     zipAfterPublish: false
+
+- task: DotNetCoreCLI@2
+  name: 'Test'
+  displayName: 'Test .NET project'
+  inputs:
+    command: test
+    projects: '$(testProject)'
+    arguments: '--configuration $(buildConfiguration)'
 
 - task: CopyFiles@2
   name: 'CopyDockerFiles'
