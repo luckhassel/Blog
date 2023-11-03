@@ -11,9 +11,18 @@ namespace Blog.CrossCutting.DependencyInjection
         {
             services.AddDbContext<BlogContext>(options =>
             {
-                //options.UseInMemoryDatabase("DB");
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
-                    b => b.MigrationsAssembly("Blog"));
+                var environment = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT");
+
+                if (environment is not null && environment == "TEST")
+                {
+                    options.UseInMemoryDatabase("DbTest");
+                }
+
+                else
+                {
+                    options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
+                        b => b.MigrationsAssembly("Blog"));
+                }
             });
         }
     }
