@@ -18,12 +18,13 @@ using Xunit;
 
 namespace Blog.Test.Features.News.Integration
 {
-    public class NewsControllerTest : TestBaseFixture
+    [Collection("Database")]
+    public class NewsControllerTest : TestBaseIntegrationFixture, IClassFixture<WebApplicationFactoryTest<Program>>
     {
         private readonly INewsHandler _newsHandler;
         private readonly ILogger<NewsController> _logger;
 
-        public NewsControllerTest() : base(new WebApplicationFactoryTest<Program>())
+        public NewsControllerTest(WebApplicationFactoryTest<Program> webApplicationFactoryTest) : base(webApplicationFactoryTest)
         {
             _newsHandler = Substitute.For<INewsHandler>();
             _logger = Substitute.For<ILogger<NewsController>>();

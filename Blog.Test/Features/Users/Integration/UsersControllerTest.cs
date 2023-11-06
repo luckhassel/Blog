@@ -20,18 +20,18 @@ using Xunit;
 
 namespace Blog.Test.Features.Users.Integration
 {
-    public class UsersControllerTest : TestBaseFixture
+    [Collection("Database")]
+    public class UsersControllerTest : TestBaseIntegrationFixture, IClassFixture<WebApplicationFactoryTest<Program>>
     {
         private readonly IUserHandler _userHandler;
         private readonly ILogger<UsersController> _logger;
         private readonly IUserRepository _userRepository;
 
-        public UsersControllerTest() : base(new WebApplicationFactoryTest<Program>())
+        public UsersControllerTest(WebApplicationFactoryTest<Program> webApplicationFactoryTest) : base(webApplicationFactoryTest)
         {
             _userHandler = Substitute.For<IUserHandler>();
             _logger = Substitute.For<ILogger<UsersController>>();
             _userRepository = Substitute.For<IUserRepository>();
-            //DeleteRegistersInDatabase();
         }
 
         [Fact]

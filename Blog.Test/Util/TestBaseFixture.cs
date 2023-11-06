@@ -11,9 +11,9 @@ using Xunit;
 namespace Blog.Test.Util
 {
     [CollectionDefinition(nameof(TestBaseCollection))]
-    public class TestBaseCollection : IClassFixture<TestBaseFixture> { }
+    public class TestBaseCollection : IClassFixture<TestBaseIntegrationFixture> { }
 
-    public abstract class TestBaseFixture : IDisposable
+    public abstract class TestBaseIntegrationFixture : IClassFixture<WebApplicationFactoryTest<Program>> 
     {
         private IServiceScope _scope;
         private readonly WebApplicationFactoryTest<Program> _webApplicationFactory;
@@ -21,14 +21,7 @@ namespace Blog.Test.Util
 
         protected IServiceProvider ServiceProvider { get; private set; }
 
-        protected readonly JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions()
-        {
-            PropertyNameCaseInsensitive = true,
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            NumberHandling = JsonNumberHandling.AllowReadingFromString
-        };
-
-        protected TestBaseFixture(WebApplicationFactoryTest<Program> webApplicationFactory)
+        protected TestBaseIntegrationFixture(WebApplicationFactoryTest<Program> webApplicationFactory)
         {
             _webApplicationFactory = webApplicationFactory;
             _client = _webApplicationFactory.CreateClient();
@@ -37,12 +30,24 @@ namespace Blog.Test.Util
             _scope = _webApplicationFactory.Services.CreateScope();
             ServiceProvider = _scope.ServiceProvider;
         }
+    }
 
-        public void Dispose()
+    public abstract class TestBaseUnitFixture : IClassFixture<WebApplicationFactoryTest<Program>> 
+    {
+        private IServiceScope _scope;
+        private readonly WebApplicationFactoryTest<Program> _webApplicationFactory;
+        protected HttpClient _client { get; private set; }
+
+        protected IServiceProvider ServiceProvider { get; private set; }
+
+        protected TestBaseUnitFixture(WebApplicationFactoryTest<Program> webApplicationFactory)
         {
-            _scope?.Dispose();
-            _client?.Dispose();
-            _webApplicationFactory?.Dispose();
+            _webApplicationFactory = webApplicationFactory;
+            _client = _webApplicationFactory.CreateClient();
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", DefaultDataMock.GetBearerToken());
+
+            _scope = _webApplicationFactory.Services.CreateScope();
+            ServiceProvider = _scope.ServiceProvider;
         }
     }
 }
