@@ -18,7 +18,7 @@ namespace Blog.Test.Util.Factories
                 if (descriptor != null) services.Remove(descriptor);
                 
                 services
-                    .AddDbContext<BlogContext>(options => options.UseInMemoryDatabase(connectionString));
+                    .AddDbContext<BlogContext>(options => options.UseInMemoryDatabase($"{Guid.NewGuid}"));
             });
         }
     }
