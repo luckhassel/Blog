@@ -17,6 +17,13 @@ variables:
 
 steps:
 
+- task: DockerCompose@0
+  displayName: Start dependencies (docker-compose)
+  inputs:
+    containerregistrytype: Container Registry
+    dockerComposeFile: docker-compose.yml
+    dockerComposeCommand: 'up -d'
+
 - task: NuGetCommand@2
   name: 'RestorePackages' 
   displayName: 'Restore NuGet packages'
