@@ -32,7 +32,7 @@ namespace Blog.Application.Handlers
             if (author is null)
                 return Result.Failure<CreateNewsResponseViewModel>(Error.Create(3, "Author not found"));
 
-            var news = NewsEntity.Create(request.Title, request.Description, author.Id);
+            var news = NewsEntity.Create(request.Title, request.Description, author);
 
             if (news.IsFailure)
                 return Result.Failure<CreateNewsResponseViewModel>(news.Error);

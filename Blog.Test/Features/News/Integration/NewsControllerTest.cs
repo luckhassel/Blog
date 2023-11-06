@@ -185,7 +185,7 @@ namespace Blog.Test.Features.News.Integration
             await repositoryUser.Create(user);
             await repositoryUser.Commit();
 
-            var news = NewsEntity.Create(request.Title, request.Description, user.Id).Value;
+            var news = NewsEntity.Create(request.Title, request.Description, user).Value;
             await repository.Create(news);
             await repository.Commit();
 

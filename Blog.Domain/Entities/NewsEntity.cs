@@ -12,16 +12,17 @@ namespace Blog.Domain.Entities
 
         private NewsEntity() { }
 
-        private NewsEntity(string title, string description, int authorId)
+        private NewsEntity(string title, string description, UserEntity author)
         {
             Title = title;
             Description = description;
-            AuthorId = authorId;
+            AuthorId = author.Id;
             PublishDate = DateTime.UtcNow;
             Guid = Guid.NewGuid();
+            Author = author;
         }
 
-        public static Result<NewsEntity> Create(string title, string description, int authorId)
+        public static Result<NewsEntity> Create(string title, string description, UserEntity author)
         {
             if (string.IsNullOrWhiteSpace(title))
                 return Result.Failure<NewsEntity>(Error.Create(1, "Title cannot be null"));
@@ -29,10 +30,7 @@ namespace Blog.Domain.Entities
             if (string.IsNullOrWhiteSpace(description))
                 return Result.Failure<NewsEntity>(Error.Create(1, "Description cannot be null"));
 
-            if (authorId <= 0)
-                return Result.Failure<NewsEntity>(Error.Create(1, "Author cannot be null"));
-
-            return new NewsEntity(title, description, authorId);
+            return new NewsEntity(title, description, author);
         }
     }
 }

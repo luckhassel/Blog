@@ -31,23 +31,4 @@ namespace Blog.Test.Util
             ServiceProvider = _scope.ServiceProvider;
         }
     }
-
-    public abstract class TestBaseUnitFixture : IClassFixture<WebApplicationFactoryTest<Program>> 
-    {
-        private IServiceScope _scope;
-        private readonly WebApplicationFactoryTest<Program> _webApplicationFactory;
-        protected HttpClient _client { get; private set; }
-
-        protected IServiceProvider ServiceProvider { get; private set; }
-
-        protected TestBaseUnitFixture(WebApplicationFactoryTest<Program> webApplicationFactory)
-        {
-            _webApplicationFactory = webApplicationFactory;
-            _client = _webApplicationFactory.CreateClient();
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", DefaultDataMock.GetBearerToken());
-
-            _scope = _webApplicationFactory.Services.CreateScope();
-            ServiceProvider = _scope.ServiceProvider;
-        }
-    }
 }
