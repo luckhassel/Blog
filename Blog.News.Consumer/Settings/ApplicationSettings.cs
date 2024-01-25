@@ -1,15 +1,9 @@
-﻿namespace Blog.Application.Settings
+﻿namespace Blog.News.Consumer.Settings
 {
     public class ApplicationSettings
     {
-        public SecuritySettings SecuritySettings { get; set; }
         public MassTransitSettings MassTransitSettings { get; set; }
         public EmailSettings EmailSettings { get; set; }
-    }
-
-    public class SecuritySettings
-    {
-        public string Secret { get; set; }
     }
 
 

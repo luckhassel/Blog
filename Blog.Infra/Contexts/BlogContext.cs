@@ -9,7 +9,10 @@ namespace Blog.Infra.Contexts
         {
         }
 
-        public BlogContext(DbContextOptions<BlogContext> options) : base(options) { }
+        public BlogContext(DbContextOptions<BlogContext> options) : base(options) 
+        { 
+            Database.EnsureCreated();
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

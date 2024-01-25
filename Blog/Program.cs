@@ -45,6 +45,7 @@ builder.Services.AddHandlers(builder.Configuration);
 builder.Services.AddSettings(builder.Configuration);
 builder.Services.AddAuthentication(builder.Configuration);
 builder.Services.AddTelemetry(builder.Configuration);
+builder.Services.AddMassTransit(builder.Configuration);
 
 var app = builder.Build();
 
@@ -59,9 +60,9 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseCors(c => c
-                .AllowAnyOrigin()
-                .AllowAnyHeader()
-                .AllowAnyMethod()
+    .AllowAnyOrigin()
+    .AllowAnyHeader()
+    .AllowAnyMethod()
 );
 
 app.UseAuthentication();

@@ -1,8 +1,13 @@
 ﻿using Blog.Application.Interfaces;
+using Blog.Application.Settings;
 using Blog.Application.ViewModels;
 using Blog.Domain.Entities;
+using Blog.Domain.Enums;
 using Blog.Domain.Interfaces.Repositories;
+using Blog.Domain.Interfaces.Services;
+using Blog.Domain.Messages;
 using Blog.Domain.Models.Shared;
+using MassTransit;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 
@@ -13,11 +18,20 @@ namespace Blog.Application.Handlers
         private readonly INewsRepository _newsRepository;
         private readonly IHttpContextAccessor _httpContext;
         private readonly IUserRepository _userRepository;
-        public NewsHandler(INewsRepository newsRepository, IHttpContextAccessor httpContext, IUserRepository userRepository)
+        private readonly IMessageBrokerService _messageBrokerService;
+        private readonly ApplicationSettings _applicationSettings;
+        public NewsHandler(
+            INewsRepository newsRepository, 
+            IHttpContextAccessor httpContext, 
+            IUserRepository userRepository,
+            IMessageBrokerService messageBrokerService,
+            ApplicationSettings applicationSettings)
         {
             _newsRepository = newsRepository;
             _httpContext = httpContext;
             _userRepository = userRepository;
+            _messageBrokerService = messageBrokerService;
+            _applicationSettings = applicationSettings;
         }
 
         public async Task<Result<CreateNewsResponseViewModel>> Create(CreateNewsRequestViewModel request)
@@ -26,6 +40,13 @@ namespace Blog.Application.Handlers
 
             if (string.IsNullOrWhiteSpace(authorEmail))
                 return Result.Failure<CreateNewsResponseViewModel>(Error.Create(3, "Author email not found"));
+
+            var message = new CreateNewsMessage()
+            {
+                Title = request.Title, 
+                Description = request.Description, 
+                AuthorEmail = authorEmail
+            };
 
             var author = await _userRepository.GetByEmailAsync(authorEmail);
 
@@ -39,6 +60,11 @@ namespace Blog.Application.Handlers
 
             await _newsRepository.Create(news.Value);
             await _newsRepository.Commit();
+
+            var sendResult = await _messageBrokerService.Send(BrokerTypes.Queue, _applicationSettings.MassTransitSettings.NewsQueue, message);
+
+            if (sendResult.IsFailure)
+                return Result.Failure<CreateNewsResponseViewModel>(sendResult.Error);
 
             return new CreateNewsResponseViewModel { Id = news.Value.Guid };
         }

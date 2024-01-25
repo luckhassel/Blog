@@ -8,7 +8,10 @@ namespace Blog.CrossCutting.DependencyInjection
     {
         public static void AddSettings(this IServiceCollection services, IConfiguration configuration)
         {
-            services.Configure<ApplicationSettings>(configuration.GetSection(nameof(ApplicationSettings)));
+            var applicationSettings = new ApplicationSettings();
+            configuration.GetSection(nameof(ApplicationSettings)).Bind(applicationSettings);
+
+            services.AddSingleton(applicationSettings);
         }
     }
 }

@@ -13,9 +13,9 @@ namespace Blog.Services.Authentication
     {
         private readonly ApplicationSettings _settings;
 
-        public AuthenticationService(IOptions<ApplicationSettings> settings)
+        public AuthenticationService(ApplicationSettings settings)
         {
-            _settings = settings.Value;
+            _settings = settings;
         }
 
         public string HashPassword(string password)

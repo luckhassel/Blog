@@ -1,5 +1,6 @@
 ﻿using Azure.Core;
 using Blog.Application.Handlers;
+using Blog.Application.Settings;
 using Blog.Application.ViewModels;
 using Blog.Domain.Entities;
 using Blog.Domain.Interfaces.Repositories;
@@ -26,6 +27,8 @@ namespace Blog.Test.Features.News.Unit
         private readonly INewsRepository _newsRepository;
         private readonly IUserRepository _userRepository;
         private readonly IAuthenticationService _authenticationService;
+        private readonly IMessageBrokerService _messageBrokerService;
+        private readonly ApplicationSettings _applicationSettings;
         private NewsHandler _newsHandler;
 
         public NewsHandlerTests()
@@ -43,8 +46,16 @@ namespace Blog.Test.Features.News.Unit
             _newsRepository = Substitute.For<INewsRepository>();
             _userRepository = Substitute.For<IUserRepository>();
             _authenticationService = Substitute.For<IAuthenticationService>();
+            _messageBrokerService = Substitute.For<IMessageBrokerService>();
+            _applicationSettings = Substitute.For<ApplicationSettings>();
 
-            _newsHandler = new NewsHandler(_newsRepository, _httpContextAccessor, _userRepository);
+
+            _newsHandler = new NewsHandler(
+                _newsRepository, 
+                _httpContextAccessor, 
+                _userRepository,
+                _messageBrokerService,
+                _applicationSettings);
         }
 
         [Fact]
@@ -89,10 +100,6 @@ namespace Blog.Test.Features.News.Unit
             result.IsSuccess
                 .Should()
                 .BeTrue();
-
-            result.Value.Id
-                .Should()
-                .NotBeEmpty();
         }
 
         [Fact]

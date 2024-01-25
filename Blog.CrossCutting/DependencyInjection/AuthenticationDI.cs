@@ -34,8 +34,6 @@ namespace Blog.CrossCutting.DependencyInjection
                     ValidateAudience = false
                 };
             });
-
-            services.Configure<ApplicationSettings>(configuration.GetSection(nameof(ApplicationSettings)));
         }
     }
 }
