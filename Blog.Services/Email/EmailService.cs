@@ -7,7 +7,7 @@ using Blog.Application.Settings;
 namespace Blog.Services.Email
 {
     public class EmailService : IEmailService
-    {   
+    {
         public EmailService()
         {
         }
@@ -16,16 +16,14 @@ namespace Blog.Services.Email
             string senderName,
             string senderEmail,
             string senderPassword,
-            string receiverName, 
-            string receiverEmail, 
-            string subject, 
+            string receiverName,
+            string receiverEmail,
+            string subject,
             string message,
             string smtpServer,
             int smtpPort
             )
         {
-            Console.WriteLine($"{senderName} {senderEmail} {senderPassword} {receiverName} {receiverEmail} {subject} {message} {smtpServer} {smtpPort}");
-
             if (string.IsNullOrWhiteSpace(receiverName))
                 return Result.Failure(Error.Create(1, "Receiver cannot be null"));
 
@@ -41,7 +39,8 @@ namespace Blog.Services.Email
             email.To.Add(new MailboxAddress(receiverName, receiverEmail));
 
             email.Subject = subject;
-            email.Body = new TextPart(MimeKit.Text.TextFormat.Html) { 
+            email.Body = new TextPart(MimeKit.Text.TextFormat.Html)
+            {
                 Text = message
             };
 
