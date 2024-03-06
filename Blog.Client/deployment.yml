@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blog-client
+spec:
+  selector:
+    matchLabels:
+      app: blog-client
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: blog-client
+    spec:
+      containers:
+      - name: blog-client
+        image: localhost:32000/blog-client:v10
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: API_LINK
+            value: http://localhost/api
+        ports:
+            - containerPort: 4200
+        resources:
+          # limits:
+          #   memory: "128Mi"
+          #   cpu: "500m"
+      # imagePullSecrets:
+      #   - name: blogsecret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: blog-client-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: blog-client
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+    name: blog-ingress
+spec:
+    rules:
+    - http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: blog-client-service
+              port:
+                number: 80
+        - path: /api/*
+          pathType: Prefix
+          backend:
+            service:
+              name: blog-server-service
+              port:
+                number: 80
+        - path: /api
+          pathType: Prefix
+          backend:
+            service:
+              name: blog-server-service
+              port:
+                number: 80

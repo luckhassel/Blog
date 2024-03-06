@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blog-api
+spec:
+  selector:
+    matchLabels:
+      app: blog-api
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: blog-api
+    spec:
+      containers:
+      - name: blog-api
+        image: localhost:32000/blog-server:v3
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: DOTNET_ENVIRONMENT
+            value: "Development"
+          - name: ASPNETCORE_URLS
+            value: http://+:80
+        ports:
+            - containerPort: 80
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+      imagePullSecrets:
+        - name: blogsecret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: blog-server-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: blog-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
